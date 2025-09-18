@@ -26,7 +26,6 @@ const mainItems = [
   { title: 'Home', url: '/dashboard', icon: Home },
   { title: 'Forums', url: '/forums', icon: MessageSquare },
   { title: 'Groups', url: '/groups', icon: Users },
-  { title: 'Trading', url: '/trading', icon: TrendingUp },
   { title: 'Messages', url: '/messages', icon: MessageCircle },
 ];
 
@@ -37,6 +36,7 @@ const learningItems = [
 
 const userItems = [
   { title: 'Profile', url: '/profile', icon: User },
+  { title: 'Notifications', url: '/notifications', icon: MessageSquare },
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
 

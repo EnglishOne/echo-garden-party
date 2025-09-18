@@ -8,6 +8,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppLayout } from "@/components/layout/AppLayout";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import Forums from "./pages/Forums";
+import Profile from "./pages/Profile";
+import Groups from "./pages/Groups";
+import Messages from "./pages/Messages";
+import Notifications from "./pages/Notifications";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -61,6 +66,11 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/forums" element={<Forums />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/groups" element={<Groups />} />
+                <Route path="/messages" element={<Messages />} />
+                <Route path="/notifications" element={<Notifications />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
