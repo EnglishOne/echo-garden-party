@@ -11,16 +11,13 @@ import {
   Target,
   Bell
 } from 'lucide-react';
-import { useProfile } from '@/hooks/useProfile';
-import { useTopics } from '@/hooks/useTopics';
-import { useForums } from '@/hooks/useForums';
+import { useUserProfile } from '@/hooks/useUserProfile';
+import { usePopularTopics } from '@/hooks/useForums';
 
 export default function Dashboard() {
   console.log('Dashboard component loaded');
-  
-  const { profile } = useProfile();
-  const { topics } = useTopics();
-  const { forums } = useForums();
+  const { profile } = useUserProfile(); 
+  const { topics: popularTopics } = usePopularTopics();
   
   const [stats] = useState({
     postsToday: 127,
@@ -30,12 +27,21 @@ export default function Dashboard() {
     weeklyProgress: 100
   });
 
-  const [popularPosts] = useState([
+  // Use real data from popularTopics, fallback to mock data if no real data
+  const displayedPosts = popularTopics && popularTopics.length > 0 ? popularTopics.map((topic) => ({
+    id: topic.id,
+    title: topic.title,
+    author: "Por Usuário",
+    category: "Community",
+    likes: Math.floor(Math.random() * 30) + 10, // Mock likes for now
+    comments: topic.replies_count || 0,
+    tag: "Discussão"
+  })) : [
     {
       id: 1,
       title: "Como melhorar o listening em inglês?",
       author: "Por Martin",
-      category: "Listening",
+      category: "Listening", 
       likes: 24,
       comments: 6,
       tag: "Dicas"
@@ -52,7 +58,7 @@ export default function Dashboard() {
     {
       id: 3,
       title: "Dicas para entrevistas em inglês",
-      author: "Por Maria",
+      author: "Por Maria", 
       category: "Business",
       likes: 32,
       comments: 12,
@@ -67,7 +73,7 @@ export default function Dashboard() {
       comments: 8,
       tag: "Vocabulário"
     }
-  ]);
+  ];
 
   const [recentActivities] = useState([
     {
@@ -132,7 +138,7 @@ export default function Dashboard() {
     { position: 1, name: "Sophie Martinez", points: "2,847 XP", medal: "🥇" },
     { position: 2, name: "Lucas Thompson", points: "2,756 XP", medal: "🥈" },
     { position: 3, name: "Isabella Chen", points: "2,623 XP", medal: "🥉" },
-    { position: 15, name: "Você", points: "1,847 XP", medal: "", highlight: true }
+    { position: 15, name: profile?.display_name || "Você", points: `${profile?.points || 0} XP`, medal: "", highlight: true }
   ]);
 
   return (
@@ -305,7 +311,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-4">
-              {topics.length > 0 ? topics.slice(0, 4).map((topic) => (
+              {popularTopics && popularTopics.length > 0 ? popularTopics.map((topic) => (
                 <div key={topic.id} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                   <div className="flex items-start justify-between mb-2">
                     <h4 className="font-medium text-sm leading-tight">{topic.title}</h4>
@@ -314,7 +320,7 @@ export default function Dashboard() {
                     </Badge>
                   </div>
                   <div className="text-xs text-muted-foreground mb-2">
-                    Por {topic.author_name} • {new Date(topic.created_at).toLocaleDateString('pt-BR')}
+                    Tópico • {new Date(topic.created_at).toLocaleDateString('pt-BR')}
                   </div>
                   <div className="flex items-center gap-4 text-xs text-muted-foreground">
                     <div className="flex items-center gap-1">
@@ -330,7 +336,7 @@ export default function Dashboard() {
                     </Button>
                   </div>
                 </div>
-              )) : popularPosts.map((post) => (
+              )) : displayedPosts.map((post) => (
                 <div key={post.id} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                   <div className="flex items-start justify-between mb-2">
                     <h4 className="font-medium text-sm leading-tight">{post.title}</h4>
