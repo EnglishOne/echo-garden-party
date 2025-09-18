@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => {
+  console.log('App component is rendering');
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -34,6 +35,7 @@ const App = () => {
   }, []);
 
   if (loading) {
+    console.log('App is in loading state');
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
@@ -43,6 +45,8 @@ const App = () => {
       </div>
     );
   }
+
+  console.log('App loading complete, user:', user ? 'authenticated' : 'not authenticated');
 
   return (
     <QueryClientProvider client={queryClient}>
