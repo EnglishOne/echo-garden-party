@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useProfile } from '@/hooks/useProfile';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ interface AppLayoutProps {
 export function AppLayout({ children }: AppLayoutProps) {
   const [notifications, setNotifications] = useState(3);
   const [user, setUser] = useState<any>(null);
+  const { profile } = useProfile();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -68,8 +70,8 @@ export function AppLayout({ children }: AppLayoutProps) {
               
               <div className="flex items-center gap-2">
                 <div className="text-right">
-                  <p className="text-sm font-medium">{user?.user_metadata?.display_name || 'User'}</p>
-                  <p className="text-xs text-muted-foreground">Level: Beginner</p>
+                  <p className="text-sm font-medium">{profile?.display_name || user?.user_metadata?.display_name || 'User'}</p>
+                  <p className="text-xs text-muted-foreground">Level: {profile?.english_level || 'Beginner'}</p>
                 </div>
                 <Button variant="ghost" size="sm" onClick={handleSignOut}>
                   <LogOut className="h-4 w-4" />

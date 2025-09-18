@@ -11,9 +11,16 @@ import {
   Target,
   Bell
 } from 'lucide-react';
+import { useProfile } from '@/hooks/useProfile';
+import { useTopics } from '@/hooks/useTopics';
+import { useForums } from '@/hooks/useForums';
 
 export default function Dashboard() {
   console.log('Dashboard component loaded');
+  
+  const { profile } = useProfile();
+  const { topics } = useTopics();
+  const { forums } = useForums();
   
   const [stats] = useState({
     postsToday: 127,
@@ -298,7 +305,32 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-4">
-              {popularPosts.map((post) => (
+              {topics.length > 0 ? topics.slice(0, 4).map((topic) => (
+                <div key={topic.id} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                  <div className="flex items-start justify-between mb-2">
+                    <h4 className="font-medium text-sm leading-tight">{topic.title}</h4>
+                    <Badge variant="secondary" className="ml-2 text-xs">
+                      Discussion
+                    </Badge>
+                  </div>
+                  <div className="text-xs text-muted-foreground mb-2">
+                    Por {topic.author_name} • {new Date(topic.created_at).toLocaleDateString('pt-BR')}
+                  </div>
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Heart className="w-3 h-3" />
+                      <span>{Math.floor(Math.random() * 30) + 5}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <MessageCircle className="w-3 h-3" />
+                      <span>{topic.replies_count || 0}</span>
+                    </div>
+                    <Button variant="ghost" size="sm" className="ml-auto h-6 px-2 text-xs">
+                      Ver mais
+                    </Button>
+                  </div>
+                </div>
+              )) : popularPosts.map((post) => (
                 <div key={post.id} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                   <div className="flex items-start justify-between mb-2">
                     <h4 className="font-medium text-sm leading-tight">{post.title}</h4>
