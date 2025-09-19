@@ -17,8 +17,8 @@ All colors MUST be HSL.
     --popover: 220 100% 99%;
     --popover-foreground: 220 15% 25%;
 
-    --primary: 200 100% 85%;
-    --primary-foreground: 220 15% 25%;
+    --primary: 220 85% 55%;
+    --primary-foreground: 220 100% 98%;
 
     --secondary: 300 30% 90%;
     --secondary-foreground: 220 15% 25%;
@@ -65,7 +65,7 @@ All colors MUST be HSL.
     --popover: 220 25% 10%;
     --popover-foreground: 220 20% 92%;
 
-    --primary: 200 80% 60%;
+    --primary: 220 85% 65%;
     --primary-foreground: 220 25% 8%;
 
     --secondary: 300 20% 20%;
