@@ -48,7 +48,9 @@ export function AppSidebar() {
 
   const isActive = (path: string) => currentPath === path;
   const getNavCls = ({ isActive }: { isActive: boolean }) =>
-    isActive ? 'bg-primary/10 text-primary font-medium border-r-2 border-primary' : 'hover:bg-accent/50';
+    isActive 
+      ? 'bg-primary/15 text-primary font-semibold border-r-3 border-primary shadow-sm' 
+      : 'text-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200';
 
   return (
     <Sidebar className={isCollapsed ? 'w-14' : 'w-64'} collapsible="icon">
