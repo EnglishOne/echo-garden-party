@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { CreateGroupDialog } from '@/components/groups/CreateGroupDialog';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Users,
   Search,
@@ -19,8 +22,7 @@ import {
 
 export default function Groups() {
   const [searchTerm, setSearchTerm] = useState('');
-
-  const myGroups = [
+  const [myGroups, setMyGroups] = useState([
     {
       id: '1',
       name: 'Advanced Grammar Study',
@@ -43,7 +45,10 @@ export default function Groups() {
       lastActivity: '1d ago',
       unreadMessages: 12
     }
-  ];
+  ]);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
 
   const availableGroups = [
     {
@@ -108,6 +113,46 @@ export default function Groups() {
     'Low': 'text-gray-600 bg-gray-100'
   };
 
+  const handleGroupCreated = (newGroup: any) => {
+    setMyGroups(prev => [...prev, newGroup]);
+  };
+
+  const handleJoinGroup = async (groupId: string, isPrivate: boolean) => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      toast({
+        title: isPrivate ? 'Request sent!' : 'Joined successfully!',
+        description: isPrivate 
+          ? 'Your request to join the group has been sent to the admin.'
+          : 'Welcome to the group!',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Something went wrong. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleEnterGroup = (groupId: string) => {
+    navigate(`/groups/${groupId}`);
+  };
+
+  // Filter groups based on search term
+  const filteredAvailableGroups = availableGroups.filter(group =>
+    group.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    group.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    group.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredMyGroups = myGroups.filter(group =>
+    group.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    group.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -118,10 +163,7 @@ export default function Groups() {
             Join focused study groups and learn together
           </p>
         </div>
-        <Button className="gap-2">
-          <Plus className="w-4 h-4" />
-          Create Group
-        </Button>
+        <CreateGroupDialog onGroupCreated={handleGroupCreated} />
       </div>
 
       {/* Search */}
@@ -137,13 +179,13 @@ export default function Groups() {
 
       <Tabs defaultValue="my-groups" className="space-y-6">
         <TabsList>
-          <TabsTrigger value="my-groups">My Groups ({myGroups.length})</TabsTrigger>
+          <TabsTrigger value="my-groups">My Groups ({filteredMyGroups.length})</TabsTrigger>
           <TabsTrigger value="discover">Discover</TabsTrigger>
           <TabsTrigger value="popular">Popular</TabsTrigger>
         </TabsList>
 
         <TabsContent value="my-groups" className="space-y-4">
-          {myGroups.length === 0 ? (
+          {filteredMyGroups.length === 0 ? (
             <Card>
               <CardContent className="text-center py-8">
                 <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
@@ -154,7 +196,7 @@ export default function Groups() {
             </Card>
           ) : (
             <div className="grid md:grid-cols-2 gap-4">
-              {myGroups.map((group) => {
+              {filteredMyGroups.map((group) => {
                 const theme = groupThemes[group.theme as keyof typeof groupThemes];
                 const IconComponent = theme?.icon || Users;
                 
@@ -200,7 +242,9 @@ export default function Groups() {
                             <span>{group.lastActivity}</span>
                           </div>
                         </div>
-                        <Button size="sm">Enter Group</Button>
+                        <Button size="sm" onClick={() => handleEnterGroup(group.id)}>
+                          Enter Group
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -212,7 +256,7 @@ export default function Groups() {
 
         <TabsContent value="discover" className="space-y-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {availableGroups.map((group) => {
+            {filteredAvailableGroups.map((group) => {
               const theme = groupThemes[group.theme as keyof typeof groupThemes];
               const IconComponent = theme?.icon || Users;
               
@@ -262,6 +306,7 @@ export default function Groups() {
                         size="sm" 
                         className="w-full"
                         variant={group.isPrivate ? 'outline' : 'default'}
+                        onClick={() => handleJoinGroup(group.id, group.isPrivate)}
                       >
                         {group.isPrivate ? 'Request to Join' : 'Join Group'}
                       </Button>
@@ -323,6 +368,7 @@ export default function Groups() {
                         
                         <Button 
                           variant={group.isPrivate ? 'outline' : 'default'}
+                          onClick={() => handleJoinGroup(group.id, group.isPrivate)}
                         >
                           {group.isPrivate ? 'Request Access' : 'Join Group'}
                         </Button>

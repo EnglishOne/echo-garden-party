@@ -12,6 +12,7 @@ import Forums from "./pages/Forums";
 import ForumTopics from "./pages/ForumTopics";
 import Profile from "./pages/Profile";
 import Groups from "./pages/Groups";
+import GroupDetails from "./pages/GroupDetails";
 import Messages from "./pages/Messages";
 import Notifications from "./pages/Notifications";
 import NotFound from "./pages/NotFound";
@@ -71,6 +72,7 @@ const App = () => {
               <Route path="/forums/:forumId/topics" element={<ForumTopics />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/groups" element={<Groups />} />
+              <Route path="/groups/:groupId" element={<GroupDetails />} />
               <Route path="/messages" element={<Messages />} />
               <Route path="/notifications" element={<Notifications />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
