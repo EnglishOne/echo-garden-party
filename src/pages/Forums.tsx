@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -7,16 +8,22 @@ import {
   MessageSquare, 
   Users, 
   Search,
-  Plus,
   Pin,
   Clock,
   TrendingUp
 } from 'lucide-react';
 import { useForums } from '@/hooks/useForums';
+import { CreateForumDialog } from '@/components/forums/CreateForumDialog';
 
 export default function Forums() {
   const { forums, loading } = useForums();
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+
+  const refreshForums = () => {
+    // This would trigger a refetch of forums
+    window.location.reload();
+  };
 
   const mockForums = [
     {
@@ -106,10 +113,7 @@ export default function Forums() {
             Join discussions and share your English learning journey
           </p>
         </div>
-        <Button className="gap-2">
-          <Plus className="w-4 h-4" />
-          Create Forum
-        </Button>
+        <CreateForumDialog onForumCreated={refreshForums} />
       </div>
 
       {/* Search and Stats */}
@@ -179,8 +183,15 @@ export default function Forums() {
                   </CardDescription>
                 </div>
 
-                <Button variant="outline" size="sm">
-                  Join Discussion
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/forums/${forum.id}/topics`);
+                  }}
+                >
+                  View Topics
                 </Button>
               </div>
             </CardHeader>
@@ -203,7 +214,12 @@ export default function Forums() {
                 </div>
                 
                 <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="sm" className="text-xs">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-xs"
+                    onClick={() => navigate(`/forums/${forum.id}/topics`)}
+                  >
                     View Topics
                   </Button>
                 </div>

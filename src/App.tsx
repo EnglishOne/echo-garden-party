@@ -9,6 +9,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Forums from "./pages/Forums";
+import ForumTopics from "./pages/ForumTopics";
 import Profile from "./pages/Profile";
 import Groups from "./pages/Groups";
 import Messages from "./pages/Messages";
@@ -66,11 +67,12 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/forums" element={<Forums />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/groups" element={<Groups />} />
-                <Route path="/messages" element={<Messages />} />
-                <Route path="/notifications" element={<Notifications />} />
+              <Route path="/forums" element={<Forums />} />
+              <Route path="/forums/:forumId/topics" element={<ForumTopics />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/groups" element={<Groups />} />
+              <Route path="/messages" element={<Messages />} />
+              <Route path="/notifications" element={<Notifications />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
